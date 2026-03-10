@@ -1,0 +1,21 @@
+{
+  "name": "NQ Credit Spread Dashboard",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
+  "postCreateCommand": "pip install -r requirements.txt && pip install jupyter",
+  "forwardPorts": [8888, 4002, 7497],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-toolsai.jupyter",
+        "ms-python.python"
+      ],
+      "settings": {
+        "jupyter.notebookFileRoot": "${workspaceFolder}"
+      }
+    }
+  },
+  "postStartCommand": "jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password='' &"
+}
