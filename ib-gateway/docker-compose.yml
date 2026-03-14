@@ -1,0 +1,37 @@
+version: "3.4"
+
+# ============================================================
+# IB Gateway Local Docker Setup
+# Run this on YOUR LOCAL MACHINE, not in Codespaces
+# Then tunnel to Codespaces via:
+#   gh codespace ports forward 4002:localhost:4002 --codespace <name>
+# ============================================================
+
+services:
+  ib-gateway:
+    image: ghcr.io/gnzsnz/ib-gateway:latest
+    restart: unless-stopped
+    environment:
+      TWS_USERID: ${TWS_USERID}
+      TWS_PASSWORD: ${TWS_PASSWORD}
+      TRADING_MODE: ${TRADING_MODE:-paper}
+      VNC_SERVER_PASSWORD: ${VNC_SERVER_PASSWORD:-ibgateway}
+      TIME_ZONE: ${TIME_ZONE:-America/Toronto}
+      READ_ONLY_API: "no"
+      TWOFA_TIMEOUT_ACTION: "restart"
+      AUTO_RESTART_TIME: "11:59 PM"
+      RELOGIN_AFTER_TWOFA_TIMEOUT: "yes"
+      JAVA_HEAP_SIZE: "512m"
+    ports:
+      - "127.0.0.1:4002:4002"   # Paper trading API
+      - "127.0.0.1:4001:4001"   # Live trading API
+      - "127.0.0.1:5900:5900"   # VNC monitoring
+    volumes:
+      - ./config:/root/Jts
+      - ./logs:/opt/ibgateway/logs
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "4002"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s

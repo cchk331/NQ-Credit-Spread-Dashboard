@@ -2,10 +2,32 @@
   "name": "NQ Credit Spread Dashboard",
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
   "features": {
-    "ghcr.io/devcontainers/features/node:1": {}
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/devcontainers/features/sshd:1": {
+      "version": "latest"
+    }
+  },
+  "hostRequirements": {
+    "cpus": 4,
+    "memory": "16gb",
+    "storage": "32gb"
   },
   "postCreateCommand": "pip install -r requirements.txt && pip install jupyter",
   "forwardPorts": [8888, 4002, 7497],
+  "portsAttributes": {
+    "4002": {
+      "label": "IB Gateway Paper",
+      "onAutoForward": "silent"
+    },
+    "7497": {
+      "label": "IB TWS Paper",
+      "onAutoForward": "silent"
+    },
+    "8888": {
+      "label": "Jupyter Notebook",
+      "onAutoForward": "openBrowser"
+    }
+  },
   "customizations": {
     "vscode": {
       "extensions": [
